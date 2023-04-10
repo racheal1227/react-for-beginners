@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const root = document.getElementById('root');
+    const App = () => {
+      const [minutes, setMinutes] = React.useState(0);
+      const [hours, setHours] = React.useState(0);
+      const [flip, setFlip] = React.useState('minutes');
+
+      const handleFlip = () => {
+        reset();
+        setFlip(current => {
+          if (current === 'minutes') setFlip('hours');
+          else if (current === 'hours') setFlip('minutes');
+        });
+      };
+
+      const reset = () => {
+        setMinutes(0);
+        setHours(0);
+      };
+
+      return (
+        <>
+          <h1>Super Converter</h1>
+          <label htmlFor="minutes">Minutes</label>
+          <input
+            value={flip === 'minutes' ? minutes : hours * 60}
+            onChange={e => flip === 'minutes' && setMinutes(e.target.value)}
+            disabled={flip === 'hours'}
+            id="minutes"
+            type="number"
+            placeholder="Minutes"
+          />
+          <br />
+          <label htmlFor="hours">Hours</label>
+          <input
+            value={flip === 'hours' ? hours : minutes / 60}
+            onChange={e => flip === 'hours' && setHours(e.target.value)}
+            disabled={flip === 'minutes'}
+            id="hours"
+            type="number"
+            placeholder="Hours"
+          />
+          <br />
+          <button onClick={reset}>Reset</button>
+          <button onClick={handleFlip}>Flip</button>
+        </>
+      );
+    };
+    ReactDOM.render(<App />, root);
+  </script>
+</html>
