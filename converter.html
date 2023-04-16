@@ -14,7 +14,8 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script type="text/babel">
     const root = document.getElementById('root');
-    const App = () => {
+
+    const MinutesToHours = () => {
       const [minutes, setMinutes] = React.useState(0);
       const [hours, setHours] = React.useState(0);
       const [flip, setFlip] = React.useState('minutes');
@@ -22,8 +23,11 @@
       const handleFlip = () => {
         reset();
         setFlip(current => {
-          if (current === 'minutes') setFlip('hours');
-          else if (current === 'hours') setFlip('minutes');
+          if (current === 'minutes') {
+            setFlip('hours');
+          } else {
+            setFlip('minutes');
+          }
         });
       };
 
@@ -34,7 +38,7 @@
 
       return (
         <>
-          <h1>Super Converter</h1>
+          <h2>Minutes to Hours</h2>
           <label htmlFor="minutes">Minutes</label>
           <input
             value={flip === 'minutes' ? minutes : hours * 60}
@@ -57,6 +61,78 @@
           <br />
           <button onClick={reset}>Reset</button>
           <button onClick={handleFlip}>Flip</button>
+        </>
+      );
+    };
+
+    const KmToMiles = () => {
+      const [km, setKm] = React.useState(0);
+      const [miles, setMiles] = React.useState(0);
+      const [flip, setFlip] = React.useState('km');
+
+      const handleFlip = () => {
+        reset();
+        setFlip(current => {
+          if (current === 'km') {
+            setFlip('miles');
+          } else {
+            setFlip('km');
+          }
+        });
+      };
+
+      const reset = () => {
+        setKm(0);
+        setMiles(0);
+      };
+
+      return (
+        <>
+          <h2>Km to Miles</h2>
+          <label htmlFor="km">Km</label>
+          <input
+            value={flip === 'km' ? km : miles * 1.609344}
+            onChange={e => flip === 'km' && setKm(e.target.value)}
+            disabled={flip === 'miles'}
+            id="km"
+            type="number"
+            placeholder="Km"
+          />
+          <br />
+          <label htmlFor="miles">Miles</label>
+          <input
+            value={flip === 'miles' ? miles : km * 0.621371}
+            onChange={e => flip === 'miles' && setMiles(e.target.value)}
+            disabled={flip === 'km'}
+            id="miles"
+            type="number"
+            placeholder="Miles"
+          />
+          <br />
+          <button onClick={reset}>Reset</button>
+          <button onClick={handleFlip}>Flip</button>
+        </>
+      );
+    };
+
+    const App = () => {
+      const [index, setIndex] = React.useState('-1');
+
+      const handleChange = e => {
+        setIndex(e.target.value);
+      };
+      return (
+        <>
+          <select onChange={handleChange}>
+            <option value="-1" default>
+              Please select
+            </option>
+            <option value="0">Minutes & Hours</option>
+            <option value="1">Km & Miles</option>
+          </select>
+          {index === '-1' && <h3>Please Select Converter</h3>}
+          {index === '0' && <MinutesToHours />}
+          {index === '1' && <KmToMiles />}
         </>
       );
     };
